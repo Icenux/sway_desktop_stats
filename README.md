@@ -29,6 +29,7 @@ under Omarchy/Hyprland, ported over after moving to plain Arch + Sway.
 - **CPU temperature** — package/overall + per-core (Intel `coretemp`, AMD `k10temp`/`zenpower`, or a thermal-zone fallback)
 - **CPU / RAM / Swap / Disk** — usage with color-coded bars (green / orange / red by load)
 - **Uptime**
+- **Battery** (remaining time / time to full, laptops only)
 - **Wi-Fi** — SSID, local IP, public IP, Tailscale IP, live ↑/↓ throughput
 - **Docker** — currently running containers
 - **Top processes** — 3 most CPU-hungry processes on the system

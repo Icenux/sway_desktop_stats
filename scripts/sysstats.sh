@@ -174,6 +174,30 @@ uptime_str=$(awk '{
   else printf "%dh %dm", h, m;
 }' /proc/uptime)
 
+# --- Battery: remaining / time-to-full (charge_* + current_* or energy_* + power_*) ---
+batt_str=""
+for bat in /sys/class/power_supply/BAT*; do
+  [ -d "$bat" ] || continue
+  b_status=$(cat "$bat/status" 2>/dev/null)
+  b_cap=$(cat "$bat/capacity" 2>/dev/null)
+  if [ -f "$bat/charge_now" ]; then
+    b_now=$(cat "$bat/charge_now"); b_full=$(cat "$bat/charge_full"); b_rate=$(cat "$bat/current_now" 2>/dev/null)
+  else
+    b_now=$(cat "$bat/energy_now" 2>/dev/null); b_full=$(cat "$bat/energy_full" 2>/dev/null); b_rate=$(cat "$bat/power_now" 2>/dev/null)
+  fi
+  b_rate=${b_rate#-}
+  b_time=""
+  if [ "${b_rate:-0}" -gt 0 ] 2>/dev/null; then
+    case "$b_status" in
+      Discharging) b_min=$(( b_now * 60 / b_rate )); b_time="$(( b_min / 60 ))h $(( b_min % 60 ))m left" ;;
+      Charging) b_min=$(( (b_full - b_now) * 60 / b_rate )); b_time="$(( b_min / 60 ))h $(( b_min % 60 ))m to full" ;;
+    esac
+  fi
+  [ -z "$b_time" ] && b_time="${b_status,,}"
+  batt_str="${b_cap}% (${b_time})"
+  break
+done
+
 # --- Wi-Fi / IP (iwd, falling back to NetworkManager), Tailscale, public IP ---
 ssid=""
 if ((IS_WIRELESS)); then
@@ -246,6 +270,7 @@ ram_line="RAM: ${mem_used_gib} / ${mem_total_gib} GiB (${mem_pct}%)"
 swap_line="Swap: ${swap_used_gib} / ${swap_total_gib} GiB (${swap_pct}%)"
 disk_line="Disk (${DISK_PATH}): ${disk_used_gib} / ${disk_total_gib} GiB (${disk_pct}%)"
 uptime_line="Uptime: ${uptime_str}"
+batt_line="Battery: ${batt_str}"
 temp_pkg_line="CPU Temp: ${pkg_temp}°C"
 ssid_line="SSID: ${ssid}"
 ip_line="IP: ${local_ip}"
@@ -254,7 +279,7 @@ ts_line="Tailscale: ${ts_ip}"
 net_line="Up: ${up_kbs} KB/s  Down: ${down_kbs} KB/s"
 
 max_len=0
-for line in "$cpu_line" "$ram_line" "$swap_line" "$disk_line" "$uptime_line" \
+for line in "$cpu_line" "$ram_line" "$swap_line" "$disk_line" "$uptime_line" "$batt_line" \
             "$temp_pkg_line" "$core_temp_line" \
             "$ssid_line" "$ip_line" "$vps_line" "$ts_line" "$net_line" \
             "${docker_lines[@]}" "${top_proc_lines[@]}"; do
@@ -293,6 +318,7 @@ lines+=(
   "$disk_bar"
   ""
   "<span foreground='$COLOR_LABEL'>Uptime:</span> ${uptime_str}"
+  ${batt_str:+"<span foreground='$COLOR_LABEL'>Battery:</span> ${batt_str}"}
   ""
   "$rule_line"
 )
