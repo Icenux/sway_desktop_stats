@@ -2,11 +2,11 @@
 
 Conky-style desktop stats widget for Sway/wlroots — that actually stays behind your windows.
 
-[![Release](https://img.shields.io/github/v/release/Luquas95/sway-desktop-stats)](https://github.com/Luquas95/sway-desktop-stats/releases)
+[![Release](https://img.shields.io/github/v/release/Icenux/sway_desktop_stats)](https://github.com/Icenux/sway_desktop_stats/releases)
 [![Platform](https://img.shields.io/badge/platform-Sway%20%2F%20wlroots-blue?logo=linux&logoColor=white)](https://swaywm.org/)
 [![Shell](https://img.shields.io/badge/language-bash-green)](https://www.gnu.org/software/bash/)
 [![License](https://img.shields.io/badge/license-MIT-yellow)](https://opensource.org/license/MIT)
-[![Stars](https://img.shields.io/github/stars/Luquas95/sway-desktop-stats?style=social)](https://github.com/Luquas95/sway-desktop-stats)
+[![Stars](https://img.shields.io/github/stars/Icenux/sway_desktop_stats?style=social)](https://github.com/Icenux/sway_desktop_stats)
 
 ![screenshot](docs/screenshot.png)
 
@@ -59,7 +59,7 @@ fallback instead of real data:
 ## Installation
 
 ```bash
-git clone https://github.com/Luquas95/sway-desktop-stats.git
+git clone https://github.com/Icenux/sway_desktop_stats.git
 cd sway-desktop-stats
 ./install.sh
 ```
