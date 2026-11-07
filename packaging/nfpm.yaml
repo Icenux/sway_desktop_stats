@@ -1,0 +1,71 @@
+# The .deb of sway-desktop-stats, called by packaging/package.sh. The panel is installed per user:
+# the package puts the files in /usr/share/sway-desktop-stats and the commands sway-desktop-stats-install /
+# -uninstall (the repository's install.sh / uninstall.sh) copy them into the user's ~/.config.
+# Besides that it sets up the shared Icenux APT repository (github.com/Icenux/icenux, by
+# packaging/files/postinst.sh), so later versions arrive with the ordinary system update.
+name: sway-desktop-stats
+arch: all
+platform: linux
+version: ${VERSION}
+release: 1
+section: utils
+priority: optional
+maintainer: Lukas <https://github.com/Icenux/sway_desktop_stats>
+description: |-
+  Simple info panel for Sway (a second waybar instance).
+  Shows swap, RAM, CPU, Wi-Fi, uptime, docker and the top processes. Install it for your user with
+  sway-desktop-stats-install.
+vendor: Icenux
+homepage: https://github.com/Icenux/sway_desktop_stats
+license: MIT
+
+depends:
+  - bash
+  - waybar
+  - iproute2
+  - awk
+suggests:
+  - docker.io
+  - tailscale
+  - curl
+  - iwd
+  - network-manager
+
+contents:
+  - src: install.sh
+    dst: /usr/share/sway-desktop-stats/install.sh
+    file_info: { mode: 0755 }
+  - src: uninstall.sh
+    dst: /usr/share/sway-desktop-stats/uninstall.sh
+    file_info: { mode: 0755 }
+  - src: scripts/sysstats.sh
+    dst: /usr/share/sway-desktop-stats/scripts/sysstats.sh
+    file_info: { mode: 0755 }
+  - src: sway/desktop-stats-widget.sh
+    dst: /usr/share/sway-desktop-stats/sway/desktop-stats-widget.sh
+    file_info: { mode: 0755 }
+  - src: desktop-stats.jsonc
+    dst: /usr/share/sway-desktop-stats/desktop-stats.jsonc
+  - src: desktop-stats.css
+    dst: /usr/share/sway-desktop-stats/desktop-stats.css
+  - src: desktop-stats.conf.example
+    dst: /usr/share/sway-desktop-stats/desktop-stats.conf.example
+  - src: VERSION
+    dst: /usr/share/sway-desktop-stats/VERSION
+  - src: packaging/files/sway-desktop-stats-install
+    dst: /usr/bin/sway-desktop-stats-install
+    file_info: { mode: 0755 }
+  - src: packaging/files/sway-desktop-stats-uninstall
+    dst: /usr/bin/sway-desktop-stats-uninstall
+    file_info: { mode: 0755 }
+  - src: LICENSE
+    dst: /usr/share/doc/sway-desktop-stats/copyright
+
+  # the Icenux package source: the files lie next to the application, postinst.sh puts them in place
+  - src: packaging/files/icenux.asc
+    dst: /usr/share/sway-desktop-stats/icenux.asc
+  - src: packaging/files/icenux.list
+    dst: /usr/share/sway-desktop-stats/icenux.list
+
+scripts:
+  postinstall: packaging/files/postinst.sh

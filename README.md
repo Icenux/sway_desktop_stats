@@ -58,9 +58,21 @@ fallback instead of real data:
 
 ## Installation
 
+From the Icenux package repository (Debian / Ubuntu / Mint) — later versions then arrive with `apt upgrade`:
+
+```bash
+sudo curl -fsSL https://icenux.github.io/icenux/icenux.asc -o /usr/share/keyrings/icenux.asc
+echo 'deb [signed-by=/usr/share/keyrings/icenux.asc] https://icenux.github.io/icenux/apt ./' \
+  | sudo tee /etc/apt/sources.list.d/icenux.list
+sudo apt update && sudo apt install sway-desktop-stats
+sway-desktop-stats-install        # as your user: the same as ./install.sh below
+```
+
+From source:
+
 ```bash
 git clone https://github.com/Icenux/sway_desktop_stats.git
-cd sway-desktop-stats
+cd sway_desktop_stats
 ./install.sh
 ```
 
