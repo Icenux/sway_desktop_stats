@@ -1,4 +1,4 @@
-# The .deb of sway-desktop-stats, called by packaging/package.sh. The panel is installed per user:
+# The .deb and the Arch package (.pkg.tar.zst) of sway-desktop-stats, called by packaging/package.sh. The panel is installed per user:
 # the package puts the files in /usr/share/sway-desktop-stats and the commands sway-desktop-stats-install /
 # -uninstall (the repository's install.sh / uninstall.sh) copy them into the user's ~/.config.
 # Besides that it sets up the shared Icenux APT repository (github.com/Icenux/icenux, by
@@ -31,6 +31,14 @@ suggests:
   - iwd
   - network-manager
 
+overrides:
+  archlinux:
+    depends:
+      - bash
+      - waybar
+      - iproute2
+      - gawk
+
 contents:
   - src: install.sh
     dst: /usr/share/sway-desktop-stats/install.sh
@@ -60,12 +68,18 @@ contents:
     file_info: { mode: 0755 }
   - src: LICENSE
     dst: /usr/share/doc/sway-desktop-stats/copyright
+    packager: deb
 
   # the Icenux package source: the files lie next to the application, postinst.sh puts them in place
   - src: packaging/files/icenux.asc
     dst: /usr/share/sway-desktop-stats/icenux.asc
+    packager: deb
   - src: packaging/files/icenux.list
     dst: /usr/share/sway-desktop-stats/icenux.list
+    packager: deb
+  - src: LICENSE
+    dst: /usr/share/licenses/sway-desktop-stats/LICENSE
+    packager: archlinux
 
 scripts:
   postinstall: packaging/files/postinst.sh
