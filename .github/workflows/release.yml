@@ -74,8 +74,29 @@ jobs:
           test -x /usr/share/sway-desktop-stats/scripts/sysstats.sh
           test -x /usr/share/sway-desktop-stats/sway/desktop-stats-widget.sh
 
+  test-install-arch:
+    needs: build
+    runs-on: ubuntu-latest
+    container: archlinux:latest
+    steps:
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+        with:
+          name: packages
+          path: rel
+      - name: Install the package
+        run: |
+          pacman -Syu --noconfirm
+          pacman -U --noconfirm "$PWD"/rel/sway-desktop-stats-*-any.pkg.tar.zst
+      - name: The installed files are in place
+        run: |
+          test "$(cat /usr/share/sway-desktop-stats/VERSION)" = "${GITHUB_REF_NAME}"
+          test -x /usr/bin/sway-desktop-stats-install
+          test -x /usr/bin/sway-desktop-stats-uninstall
+          bash -n /usr/share/sway-desktop-stats/install.sh
+          bash -n /usr/share/sway-desktop-stats/uninstall.sh
+
   release:
-    needs: test-install
+    needs: [test-install, test-install-arch]
     runs-on: ubuntu-latest
     permissions:
       contents: write
