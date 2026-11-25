@@ -1,5 +1,5 @@
 name: Release
-# A tag X.Y.Z (no "v") on master makes the release; it must equal the file VERSION.
+# A tag X.Y.Z (no "v") on main makes the release; it must equal the file VERSION.
 #   build -> test of the install -> GitHub Release.
 # GitHub only builds and tests the package (artifact "packages"). The signing key never reaches GitHub:
 # the maintainer runs icenux-app-sign-upload.sh Icenux/sway_desktop_stats sway-desktop-stats X.Y.Z (~/Documents/CC/bin) on their
@@ -29,8 +29,8 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
-      - name: The tag must be on master
-        run: git merge-base --is-ancestor "$GITHUB_SHA" origin/master
+      - name: The tag must be on main
+        run: git merge-base --is-ancestor "$GITHUB_SHA" origin/main
       - name: nfpm
         run: |
           curl -fsSL -o /tmp/nfpm.tgz \
