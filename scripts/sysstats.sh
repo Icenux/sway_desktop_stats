@@ -30,6 +30,7 @@ PUBLIC_IP_TTL=300    # seconds between public-IP lookups
 PUBLIC_IP_URL="https://icanhazip.com"
 
 USER_CONF="$HOME/.config/waybar/desktop-stats.conf"
+# shellcheck source=/dev/null
 [ -f "$USER_CONF" ] && source "$USER_CONF"
 
 color_for_pct() {

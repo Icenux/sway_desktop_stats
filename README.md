@@ -68,6 +68,13 @@ sudo apt update && sudo apt install sway-desktop-stats
 sway-desktop-stats-install        # as your user: the same as ./install.sh below
 ```
 
+On Arch Linux, install the package from the [latest release](https://github.com/Icenux/sway_desktop_stats/releases/latest), then run `sway-desktop-stats-install` as your user. The optional tools (`docker`, `tailscale`, `curl`, `iwd`, `networkmanager`) are listed as optional dependencies:
+
+```bash
+sudo pacman -U sway-desktop-stats-X.Y.Z-1-any.pkg.tar.zst
+sway-desktop-stats-install
+```
+
 From source:
 
 ```bash
@@ -190,6 +197,18 @@ Because it doesn't work — see [Why this exists](#why-this-exists) above.
 `sway-desktop-stats` is a thin waybar-based replacement that only
 covers the always-on-desktop-widget use case, not conky's full Lua
 scripting engine.
+
+## Development
+
+CI (`.github/workflows/ci.yml`) runs on every pull request. You can run the same checks locally:
+
+```bash
+shellcheck scripts/sysstats.sh install.sh uninstall.sh sway/desktop-stats-widget.sh tests/smoke.sh
+bash tests/smoke.sh      # sysstats.sh, install.sh and uninstall.sh in a throw-away $HOME (needs jq)
+```
+
+The smoke test replaces `pkill`, `waybar` and `setsid` with harmless stand-ins, so it never touches a panel
+that is running on your machine. Packages are built with `bash packaging/package.sh X.Y.Z` (needs nfpm).
 
 ## Contributors
 
