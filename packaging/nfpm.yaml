@@ -38,6 +38,13 @@ overrides:
       - waybar
       - iproute2
       - gawk
+    # Arch package names (the top-level suggests use Debian names; nfpm 2.48+ turns suggests into optdepend)
+    suggests:
+      - docker
+      - tailscale
+      - curl
+      - iwd
+      - networkmanager
 
 contents:
   - src: install.sh
